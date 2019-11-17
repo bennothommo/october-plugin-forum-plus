@@ -1,0 +1,81 @@
+<table class="forum-table">
+    <tr>
+        <th colspan="2">
+            {% if isQA %}
+                Question
+            {% else %}
+                Topic
+            {% endif %}
+        </th>
+        <th class="counter-column">
+            {% if isQA %}
+                Answers
+            {% else %}
+                Replies
+            {% endif %}
+        </th>
+        <th class="counter-column">Views</th>
+        <th class="activity-column">
+            Last
+            {% if isQA %}
+                answer
+            {% else %}
+                post
+            {% endif %}
+        </th>
+    </tr>
+
+    {% for topic in topics %}
+        <tr class="forum-topic">
+            <td class="indicator-column">
+                <div class="topic-indicator {{ topic.hasNew ? 'has-new' }}"></div>
+            </td>
+            <td>
+                <h5>
+                    {% if topic.is_sticky %}<strong>Sticky:</strong>{% endif %}
+                    {% if topic.is_locked %}<i class="icon icon-lock"></i> <strong>Locked:</strong>{% endif %}
+                    <a href="{{ topic.url }}">{{ topic.subject }}</a>
+                    <br/><small>by <a href="{{ topic.start_member.url }}">{{ topic.start_member.username }}</a></small>
+                </h5>
+            </td>
+            <td class="counter-column">
+                <p>{{ (topic.count_posts-1) }}</p>
+            </td>
+            <td class="counter-column">
+                <p>{{ topic.count_views }}</p>
+            </td>
+            <td class="activity-column">
+                <p>
+                    <img src="{{ topic.last_post_member.user.avatarThumb(24) }}" class="member-avatar" />
+                    <a href="{{ topic.last_post_member.url }}">{{ topic.last_post_member.username }}</a>
+                    <small>
+                        {% if isQA %}
+                            {% if (topic.count_posts-1) == 0 %}
+                                asked
+                            {% else %}
+                                answered
+                            {% endif %}
+                        {% else %}
+                            posted
+                        {% endif %}
+                        <a href="{{ topic.url }}?page=last#post-{{ topic.last_post_id }}">
+                            {% partial __SELF__ ~ "::timestamp" date=topic.last_post_at %}
+                        </a>
+                    </small>
+                </p>
+            </td>
+        </tr>
+    {% endfor %}
+
+    {% if not topics|length %}
+        <tr>
+            <td colspan="100">
+                {% if isQA %}
+                    There are no questions in this channel.
+                {% else %}
+                    There are no topics in this channel.
+                {% endif %}
+            </td>
+        </tr>
+    {% endif %}
+</table>

@@ -1,0 +1,36 @@
+<div class="row">
+
+    <div class="col-md-9">
+        {{ form_open({ method: 'get' })}}
+            <div class="search-box">
+                <input
+                    type="text"
+                    name="search"
+                    class="form-control"
+                    placeholder="{% if isQA %}Search questions{% else %}Search topics{% endif %}"
+                    value="{{ input('search')|e }}"
+                >
+            </div>
+        {{ form_close() }}
+    </div>
+    <div class="col-md-3 text-right">
+        {% if isGuest %}
+            <p>
+                {% if isQA %}
+                    Log in to ask a new question
+                {% else %}
+                    Log in to post a new topic
+                {% endif %}
+            </p>
+        {% else %}
+            <a href="{{ topicPage|page }}?channel={{ channel.id }}" class="btn btn-primary btn-block">
+                {% if isQA %}
+                    Ask a new question
+                {% else %}
+                    Post a new topic
+                {% endif %}
+            </a>
+        {% endif %}
+    </div>
+
+</div>

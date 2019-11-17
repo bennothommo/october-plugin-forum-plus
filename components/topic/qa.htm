@@ -1,0 +1,54 @@
+<div id="all-posts">
+    <div class="forum-posts question">
+        {% set isGuarded = topic.channel.is_guarded and not question.member.is_approved %}
+        {% if not member and isGuarded %}
+            {# Post has been hidden #}
+        {% else %}
+            <div class="forum-post {{ isGuarded ? 'is-guarded' }}" data-post-id="{{ question.id }}" id="post-{{ question.id }}">
+                {% partial __SELF__ ~ "::post" post=question noDivider=true %}
+            </div>
+        {% endif %}
+    </div>
+
+    {% if acceptedAnswers|length > 0 %}
+        <h5 class="answer-heading">
+            Accepted Answer{% if acceptedAnswers|length > 1 %}s{% endif %}
+        </h5>
+        <div class="forum-posts accepted-answers">
+            {% for post in acceptedAnswers %}
+                {% set isGuarded = topic.channel.is_guarded and not post.member.is_approved %}
+                {% if not member and isGuarded %}
+                    {# Post has been hidden #}
+                {% else %}
+                    <div class="forum-post accepted-answer {{ isGuarded ? 'is-guarded' }}" data-post-id="{{ post.id }}" id="post-{{ post.id }}">
+                        {% partial __SELF__ ~ "::post" post=post noDivider=loop.last %}
+                    </div>
+                {% endif %}
+            {% endfor %}
+        </div>
+    {% endif %}
+
+    {% if posts|length > 0 %}
+        <h5 class="answer-heading">
+            {% if acceptedAnswers|length > 0 %}
+                Other Answers
+            {% else %}
+                All Answers
+            {% endif %}
+        </h5>
+        <div class="forum-posts">
+            {% for post in posts %}
+                {% set isGuarded = topic.channel.is_guarded and not post.member.is_approved %}
+                {% if not member and isGuarded %}
+                    {# Post has been hidden #}
+                {% else %}
+                    <div class="forum-post {{ post.acceptedPost ? 'accepted-answer' }} {{ isGuarded ? 'is-guarded' }}" data-post-id="{{ post.id }}" id="post-{{ post.id }}">
+                        {% partial __SELF__ ~ "::post" post=post %}
+                    </div>
+                {% endif %}
+            {% endfor %}
+        </div>
+    {% else %}
+        <p class="no-answers">Be the first to answer this question!</p>
+    {% endif %}
+</div>

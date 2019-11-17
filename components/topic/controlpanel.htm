@@ -1,0 +1,78 @@
+{% if isQA %}
+    {% set noun = 'question' %}
+{% else %}
+    {% set noun = 'topic' %}
+{% endif %}
+
+<div class="panel">
+    <div class="list-group">
+
+        {% if member.is_moderator %}
+            <div class="list-group-item">
+                {{ form_open({ request: 'onMove', 'data-request-confirm': "Are you sure?" }) }}
+                    <label>Move to:</label>
+                    <select name="channel" class="form-control input-sm">
+                        {% for id, title in __SELF__.channelList %}
+                            <option value="{{ id }}">{{ title|raw }}</option>
+                        {% endfor %}
+                    </select>
+                    <button type="submit" class="btn btn-block btn-primary btn-sm">Move</button>
+                {{ form_close() }}
+            </div>
+
+            <a href="javascript:;"
+                class="list-group-item"
+                data-request="onLock"
+                data-request-update="'@controlpanel': '#topicControlPanel'">
+                {% if topic.is_locked %}
+                    Unlock {{ noun }}
+                {% else %}
+                    Lock {{ noun }}
+                {% endif %}
+            </a>
+
+            <a href="javascript:;"
+                class="list-group-item"
+                data-request="onSticky"
+                data-request-update="'@controlpanel': '#topicControlPanel'">
+                {% if topic.is_sticky %}
+                    Unsticky {{ noun }}
+                {% else %}
+                    Sticky {{ noun }}
+                {% endif %}
+            </a>
+        {% endif %}
+
+        {% if member %}
+            <a href="javascript:;"
+                class="list-group-item"
+                data-request="onFollow"
+                data-request-update="'@controlpanel': '#topicControlPanel'">
+                {% if member.isFollowing(topic) %}
+                    Unfollow this {{ noun }}
+                {% else %}
+                    Follow this {{ noun }}
+                {% endif %}
+            </a>
+        {% endif %}
+
+        {% if topic.is_locked %}
+            <div class="list-group-item">
+                <span class="text text-danger"><i class="icon icon-lock"></i> This {{ noun }} is locked</span>
+            </div>
+        {% else %}
+            <a href="#postForm" class="list-group-item">
+                {% if isQA %}
+                    Answer this question
+                {% else %}
+                    Post a reply
+                {% endif %}
+            </a>
+        {% endif %}
+
+        <div class="list-group-item">
+            <i class="fa fa-eye icon-eye-open"></i> {{ topic.count_views }} views
+        </div>
+
+    </div>
+</div>

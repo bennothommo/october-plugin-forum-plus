@@ -1,0 +1,7 @@
+1.0.0:
+    - Initial version of plugin.
+    - create_settings_table.php
+    - attach_current_channels.php
+    - create_vote_counts_table.php
+    - create_votes_table.php
+    - create_accepted_posts_table.php

@@ -1,0 +1,43 @@
+// out: ../css/forum-plus.css
+
+@color-accepted-answer-border: #9bb99d;
+@color-accepted-answer-bg: #f8fcf8;
+
+.rainlab-forum {
+
+    //
+    // Answer heading
+    //
+    .answer-heading {
+        margin: 30px 0;
+    }
+
+    //
+    // Q&A accepted answers
+    //
+    .forum-posts {
+        .accepted-answer {
+            position: relative;
+            padding: 20px 20px 20px 40px !important;
+
+            background: @color-accepted-answer-bg;
+            border: 1px solid @color-accepted-answer-border;
+
+            &::before {
+                content: '✔';
+                display: block;
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 30px;
+                height: 30px;
+
+                background: @color-accepted-answer-border;
+                color: #fff;
+                font-size: 22px;
+                line-height: 30px;
+                text-align: center;
+            }
+        }
+    }
+}
